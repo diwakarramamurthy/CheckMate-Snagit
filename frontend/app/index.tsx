@@ -164,11 +164,10 @@ export default function HomeScreen() {
                     </Text>
                   </View>
                   <TouchableOpacity
-                    onPress={(e) => {
-                      e.stopPropagation();
-                      handleDeleteInspection(inspection.id);
-                    }}
+                    onPress={() => handleDeleteInspection(inspection.id)}
+                    onPressIn={(e) => e.stopPropagation()}
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    style={{ zIndex: 10 }}
                   >
                     <Ionicons name="trash-outline" size={24} color="#ef4444" />
                   </TouchableOpacity>
