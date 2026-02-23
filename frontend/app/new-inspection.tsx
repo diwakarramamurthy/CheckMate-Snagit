@@ -61,17 +61,20 @@ export default function NewInspectionScreen() {
         }
       );
 
-      if (!response.ok) throw new Error('Failed to create inspection');
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('API Error:', errorText);
+        throw new Error('Failed to create inspection');
+      }
+      
       const data = await response.json();
-      Alert.alert('Success', 'Inspection created successfully', [
-        {
-          text: 'OK',
-          onPress: () => router.replace(`/inspection/${data.id}`),
-        },
-      ]);
+      console.log('Inspection created:', data.id);
+      
+      // Navigate directly to the inspection detail page
+      router.push(`/inspection/${data.id}`);
     } catch (error) {
       console.error('Error creating inspection:', error);
-      Alert.alert('Error', 'Failed to create inspection');
+      Alert.alert('Error', 'Failed to create inspection. Please try again.');
     } finally {
       setLoading(false);
     }
