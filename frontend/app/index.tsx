@@ -150,29 +150,19 @@ export default function HomeScreen() {
           inspections.map((inspection) => {
             const progress = getProgress(inspection);
             return (
-              <View key={inspection.id} style={styles.card}>
-                {/* Delete button - FIRST so it captures touches */}
-                <Pressable
-                  onPress={(e) => {
-                    console.log('Delete pressed for:', inspection.id);
-                    handleDeleteInspection(inspection.id);
-                  }}
-                  style={styles.deleteButton}
-                  hitSlop={20}
-                >
-                  <View style={styles.deleteButtonInner}>
-                    <Ionicons name="trash-outline" size={24} color="#ef4444" />
-                  </View>
-                </Pressable>
-
-                {/* Card content - Pressable instead of TouchableOpacity */}
+              <View 
+                key={inspection.id} 
+                style={styles.card}
+                pointerEvents="box-none"
+              >
+                {/* Card content - can be clicked to navigate */}
                 <Pressable
                   onPress={() => {
-                    console.log('Card pressed for:', inspection.id);
+                    console.log('Card pressed:', inspection.id);
                     router.push(`/inspection/${inspection.id}`);
                   }}
                   style={styles.cardContent}
-                  android_ripple={{ color: '#e5e7eb' }}
+                  pointerEvents="auto"
                 >
                   <View style={styles.cardHeader}>
                     <View style={styles.cardHeaderLeft}>
@@ -183,8 +173,6 @@ export default function HomeScreen() {
                         {inspection.property_config.property_address}
                       </Text>
                     </View>
-                    {/* Empty space for delete button */}
-                    <View style={{ width: 40 }} />
                   </View>
 
                   <View style={styles.cardBody}>
@@ -238,7 +226,31 @@ export default function HomeScreen() {
                       />
                     </View>
                   </View>
+                  
+                  {/* Spacer for delete button */}
+                  <View style={{ height: 24 }} />
                 </Pressable>
+
+                {/* Delete button - absolutely positioned with pointer events */}
+                <View 
+                  style={styles.deleteButtonContainer}
+                  pointerEvents="box-none"
+                >
+                  <Pressable
+                    onPress={() => {
+                      console.log('🗑️ DELETE PRESSED for:', inspection.property_config.property_name);
+                      handleDeleteInspection(inspection.id);
+                    }}
+                    style={({ pressed }) => [
+                      styles.deleteButtonInner,
+                      pressed && { opacity: 0.6, backgroundColor: '#fee2e2' }
+                    ]}
+                    pointerEvents="auto"
+                    hitSlop={30}
+                  >
+                    <Ionicons name="trash-outline" size={26} color="#ef4444" />
+                  </Pressable>
+                </View>
               </View>
             );
           })
