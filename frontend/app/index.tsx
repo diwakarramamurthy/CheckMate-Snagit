@@ -151,10 +151,28 @@ export default function HomeScreen() {
             const progress = getProgress(inspection);
             return (
               <View key={inspection.id} style={styles.card}>
-                <TouchableOpacity
-                  style={styles.cardTouchable}
-                  onPress={() => router.push(`/inspection/${inspection.id}`)}
-                  activeOpacity={0.7}
+                {/* Delete button - FIRST so it captures touches */}
+                <Pressable
+                  onPress={(e) => {
+                    console.log('Delete pressed for:', inspection.id);
+                    handleDeleteInspection(inspection.id);
+                  }}
+                  style={styles.deleteButton}
+                  hitSlop={20}
+                >
+                  <View style={styles.deleteButtonInner}>
+                    <Ionicons name="trash-outline" size={24} color="#ef4444" />
+                  </View>
+                </Pressable>
+
+                {/* Card content - Pressable instead of TouchableOpacity */}
+                <Pressable
+                  onPress={() => {
+                    console.log('Card pressed for:', inspection.id);
+                    router.push(`/inspection/${inspection.id}`);
+                  }}
+                  style={styles.cardContent}
+                  android_ripple={{ color: '#e5e7eb' }}
                 >
                   <View style={styles.cardHeader}>
                     <View style={styles.cardHeaderLeft}>
@@ -165,6 +183,8 @@ export default function HomeScreen() {
                         {inspection.property_config.property_address}
                       </Text>
                     </View>
+                    {/* Empty space for delete button */}
+                    <View style={{ width: 40 }} />
                   </View>
 
                   <View style={styles.cardBody}>
@@ -218,16 +238,7 @@ export default function HomeScreen() {
                       />
                     </View>
                   </View>
-                </TouchableOpacity>
-                
-                {/* Delete button positioned absolutely */}
-                <TouchableOpacity
-                  onPress={() => handleDeleteInspection(inspection.id)}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                  style={styles.deleteButton}
-                >
-                  <Ionicons name="trash-outline" size={24} color="#ef4444" />
-                </TouchableOpacity>
+                </Pressable>
               </View>
             );
           })
