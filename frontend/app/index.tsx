@@ -149,82 +149,85 @@ export default function HomeScreen() {
           inspections.map((inspection) => {
             const progress = getProgress(inspection);
             return (
-              <TouchableOpacity
-                key={inspection.id}
-                style={styles.card}
-                onPress={() => router.push(`/inspection/${inspection.id}`)}
-              >
-                <View style={styles.cardHeader}>
-                  <View style={styles.cardHeaderLeft}>
-                    <Text style={styles.propertyName}>
-                      {inspection.property_config.property_name}
-                    </Text>
-                    <Text style={styles.propertyAddress}>
-                      {inspection.property_config.property_address}
-                    </Text>
+              <View key={inspection.id} style={styles.card}>
+                <TouchableOpacity
+                  style={styles.cardTouchable}
+                  onPress={() => router.push(`/inspection/${inspection.id}`)}
+                  activeOpacity={0.7}
+                >
+                  <View style={styles.cardHeader}>
+                    <View style={styles.cardHeaderLeft}>
+                      <Text style={styles.propertyName}>
+                        {inspection.property_config.property_name}
+                      </Text>
+                      <Text style={styles.propertyAddress}>
+                        {inspection.property_config.property_address}
+                      </Text>
+                    </View>
                   </View>
-                  <TouchableOpacity
-                    onPress={() => handleDeleteInspection(inspection.id)}
-                    onPressIn={(e) => e.stopPropagation()}
-                    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    style={{ zIndex: 10 }}
-                  >
-                    <Ionicons name="trash-outline" size={24} color="#ef4444" />
-                  </TouchableOpacity>
-                </View>
 
-                <View style={styles.cardBody}>
-                  <View style={styles.infoRow}>
-                    <Ionicons name="home-outline" size={16} color="#6b7280" />
-                    <Text style={styles.infoText}>
-                      {inspection.property_config.bedrooms} BR •{' '}
-                      {inspection.property_config.bathrooms} BA
-                    </Text>
-                  </View>
-                  <View style={styles.infoRow}>
-                    <Ionicons name="calendar-outline" size={16} color="#6b7280" />
-                    <Text style={styles.infoText}>
-                      {new Date(inspection.inspection_date).toLocaleDateString()}
-                    </Text>
-                  </View>
-                  {inspection.inspector_name && (
+                  <View style={styles.cardBody}>
                     <View style={styles.infoRow}>
-                      <Ionicons name="person-outline" size={16} color="#6b7280" />
+                      <Ionicons name="home-outline" size={16} color="#6b7280" />
                       <Text style={styles.infoText}>
-                        {inspection.inspector_name}
+                        {inspection.property_config.bedrooms} BR •{' '}
+                        {inspection.property_config.bathrooms} BA
                       </Text>
                     </View>
-                  )}
-                </View>
+                    <View style={styles.infoRow}>
+                      <Ionicons name="calendar-outline" size={16} color="#6b7280" />
+                      <Text style={styles.infoText}>
+                        {new Date(inspection.inspection_date).toLocaleDateString()}
+                      </Text>
+                    </View>
+                    {inspection.inspector_name && (
+                      <View style={styles.infoRow}>
+                        <Ionicons name="person-outline" size={16} color="#6b7280" />
+                        <Text style={styles.infoText}>
+                          {inspection.inspector_name}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
 
-                <View style={styles.progressContainer}>
-                  <View style={styles.progressHeader}>
-                    <Text style={styles.progressText}>
-                      Progress: {progress.completed}/{progress.total}
-                    </Text>
-                    <View
-                      style={[
-                        styles.statusBadge,
-                        {
-                          backgroundColor: getStatusColor(inspection.status),
-                        },
-                      ]}
-                    >
-                      <Text style={styles.statusText}>
-                        {inspection.status.replace('_', ' ').toUpperCase()}
+                  <View style={styles.progressContainer}>
+                    <View style={styles.progressHeader}>
+                      <Text style={styles.progressText}>
+                        Progress: {progress.completed}/{progress.total}
                       </Text>
+                      <View
+                        style={[
+                          styles.statusBadge,
+                          {
+                            backgroundColor: getStatusColor(inspection.status),
+                          },
+                        ]}
+                      >
+                        <Text style={styles.statusText}>
+                          {inspection.status.replace('_', ' ').toUpperCase()}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.progressBar}>
+                      <View
+                        style={[
+                          styles.progressFill,
+                          { width: `${progress.percentage}%` },
+                        ]}
+                      />
                     </View>
                   </View>
-                  <View style={styles.progressBar}>
-                    <View
-                      style={[
-                        styles.progressFill,
-                        { width: `${progress.percentage}%` },
-                      ]}
-                    />
-                  </View>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+                
+                {/* Delete button positioned absolutely */}
+                <TouchableOpacity
+                  onPress={() => handleDeleteInspection(inspection.id)}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  style={styles.deleteButton}
+                >
+                  <Ionicons name="trash-outline" size={24} color="#ef4444" />
+                </TouchableOpacity>
+              </View>
             );
           })
         )}
