@@ -472,6 +472,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#111827',
   },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   scrollView: {
     flex: 1,
   },
