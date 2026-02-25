@@ -45,6 +45,7 @@ export default function InspectionDetailScreen() {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
     new Set()
   );
+  const [showActionMenu, setShowActionMenu] = useState(false);
 
   const fetchInspection = async () => {
     try {
