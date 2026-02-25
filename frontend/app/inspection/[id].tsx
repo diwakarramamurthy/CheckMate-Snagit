@@ -73,6 +73,14 @@ export default function InspectionDetailScreen() {
     fetchInspection();
   }, [id]);
 
+  // Refresh data when screen comes back into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('🔄 Screen focused - refreshing inspection data');
+      fetchInspection();
+    }, [id])
+  );
+
   const toggleCategory = (category: string) => {
     const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(category)) {
