@@ -669,4 +669,51 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  actionMenu: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 8,
+    paddingBottom: 32,
+  },
+  actionMenuTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#6b7280',
+    textAlign: 'center',
+    paddingVertical: 16,
+  },
+  actionMenuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    gap: 16,
+  },
+  actionMenuText: {
+    fontSize: 17,
+    color: '#111827',
+    fontWeight: '500',
+  },
+  actionMenuDivider: {
+    height: 1,
+    backgroundColor: '#e5e7eb',
+    marginVertical: 8,
+  },
+  cancelButton: {
+    marginTop: 8,
+    justifyContent: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
+  },
+  cancelButtonText: {
+    fontSize: 17,
+    color: '#6b7280',
+    fontWeight: '600',
+  },
 });
