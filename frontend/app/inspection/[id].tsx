@@ -332,6 +332,49 @@ export default function InspectionDetailScreen() {
         </TouchableOpacity>
       </Modal>
 
+      {/* Delete Confirmation Modal */}
+      <Modal
+        visible={showDeleteConfirm}
+        transparent
+        animationType="fade"
+        onRequestClose={() => !deleting && setShowDeleteConfirm(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.deleteConfirmDialog}>
+            <View style={styles.deleteIconContainer}>
+              <Ionicons name="warning" size={48} color="#ef4444" />
+            </View>
+            
+            <Text style={styles.deleteTitle}>Delete Inspection?</Text>
+            <Text style={styles.deleteMessage}>
+              Are you sure you want to delete this inspection? This action cannot be undone.
+            </Text>
+
+            <View style={styles.deleteButtonsRow}>
+              <TouchableOpacity
+                style={[styles.deleteDialogButton, styles.cancelDialogButton]}
+                onPress={() => !deleting && setShowDeleteConfirm(false)}
+                disabled={deleting}
+              >
+                <Text style={styles.cancelDialogText}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.deleteDialogButton, styles.confirmDeleteButton]}
+                onPress={confirmDelete}
+                disabled={deleting}
+              >
+                {deleting ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.confirmDeleteText}>Delete</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView style={styles.scrollView}>
         <View style={styles.propertyCard}>
           <Text style={styles.propertyName}>
