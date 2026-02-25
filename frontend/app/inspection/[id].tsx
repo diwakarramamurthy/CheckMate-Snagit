@@ -155,6 +155,37 @@ export default function InspectionDetailScreen() {
     await downloadFile(url, `inspection_${id}.xlsx`);
   };
 
+  const handleDeleteInspection = () => {
+    Alert.alert(
+      'Delete Inspection',
+      'Are you sure you want to delete this inspection? This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await fetch(
+                `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
+                { method: 'DELETE' }
+              );
+              if (!response.ok) throw new Error('Failed to delete');
+              Alert.alert('Success', 'Inspection deleted successfully', [
+                {
+                  text: 'OK',
+                  onPress: () => router.replace('/'),
+                },
+              ]);
+            } catch (error) {
+              Alert.alert('Error', 'Failed to delete inspection');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pass':
@@ -234,18 +265,38 @@ export default function InspectionDetailScreen() {
           <Ionicons name="arrow-back" size={24} color="#111827" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Inspection</Text>
-        <TouchableOpacity
-          onPress={() => {
-            Alert.alert('Export Options', 'Choose export format', [
-              { text: 'Cancel', style: 'cancel' },
-              { text: 'PDF', onPress: handleExportPDF },
-              { text: 'Excel', onPress: handleExportExcel },
-            ]);
-          }}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="download-outline" size={24} color="#3b82f6" />
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert('Options', 'Choose an action', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Export PDF', onPress: handleExportPDF },
+                { text: 'Export Excel', onPress: handleExportExcel },
+                { 
+                  text: 'Delete Inspection', 
+                  onPress: handleDeleteInspection,
+                  style: 'destructive'
+                },
+              ]);
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={{ marginRight: 12 }}
+          >
+            <Ionicons name="ellipsis-vertical" size={24} color="#111827" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              Alert.alert('Export Options', 'Choose export format', [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'PDF', onPress: handleExportPDF },
+                { text: 'Excel', onPress: handleExportExcel },
+              ]);
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="download-outline" size={24} color="#3b82f6" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView style={styles.scrollView}>

@@ -150,108 +150,76 @@ export default function HomeScreen() {
           inspections.map((inspection) => {
             const progress = getProgress(inspection);
             return (
-              <View 
-                key={inspection.id} 
+              <TouchableOpacity
+                key={inspection.id}
                 style={styles.card}
-                pointerEvents="box-none"
+                onPress={() => router.push(`/inspection/${inspection.id}`)}
+                activeOpacity={0.7}
               >
-                {/* Card content - can be clicked to navigate */}
-                <Pressable
-                  onPress={() => {
-                    console.log('Card pressed:', inspection.id);
-                    router.push(`/inspection/${inspection.id}`);
-                  }}
-                  style={styles.cardContent}
-                  pointerEvents="auto"
-                >
-                  <View style={styles.cardHeader}>
-                    <View style={styles.cardHeaderLeft}>
-                      <Text style={styles.propertyName}>
-                        {inspection.property_config.property_name}
-                      </Text>
-                      <Text style={styles.propertyAddress}>
-                        {inspection.property_config.property_address}
-                      </Text>
-                    </View>
+                <View style={styles.cardHeader}>
+                  <View style={styles.cardHeaderLeft}>
+                    <Text style={styles.propertyName}>
+                      {inspection.property_config.property_name}
+                    </Text>
+                    <Text style={styles.propertyAddress}>
+                      {inspection.property_config.property_address}
+                    </Text>
                   </View>
-
-                  <View style={styles.cardBody}>
-                    <View style={styles.infoRow}>
-                      <Ionicons name="home-outline" size={16} color="#6b7280" />
-                      <Text style={styles.infoText}>
-                        {inspection.property_config.bedrooms} BR •{' '}
-                        {inspection.property_config.bathrooms} BA
-                      </Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                      <Ionicons name="calendar-outline" size={16} color="#6b7280" />
-                      <Text style={styles.infoText}>
-                        {new Date(inspection.inspection_date).toLocaleDateString()}
-                      </Text>
-                    </View>
-                    {inspection.inspector_name && (
-                      <View style={styles.infoRow}>
-                        <Ionicons name="person-outline" size={16} color="#6b7280" />
-                        <Text style={styles.infoText}>
-                          {inspection.inspector_name}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-
-                  <View style={styles.progressContainer}>
-                    <View style={styles.progressHeader}>
-                      <Text style={styles.progressText}>
-                        Progress: {progress.completed}/{progress.total}
-                      </Text>
-                      <View
-                        style={[
-                          styles.statusBadge,
-                          {
-                            backgroundColor: getStatusColor(inspection.status),
-                          },
-                        ]}
-                      >
-                        <Text style={styles.statusText}>
-                          {inspection.status.replace('_', ' ').toUpperCase()}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={styles.progressBar}>
-                      <View
-                        style={[
-                          styles.progressFill,
-                          { width: `${progress.percentage}%` },
-                        ]}
-                      />
-                    </View>
-                  </View>
-                  
-                  {/* Spacer for delete button */}
-                  <View style={{ height: 24 }} />
-                </Pressable>
-
-                {/* Delete button - absolutely positioned with pointer events */}
-                <View 
-                  style={styles.deleteButtonContainer}
-                  pointerEvents="box-none"
-                >
-                  <Pressable
-                    onPress={() => {
-                      console.log('🗑️ DELETE PRESSED for:', inspection.property_config.property_name);
-                      handleDeleteInspection(inspection.id);
-                    }}
-                    style={({ pressed }) => [
-                      styles.deleteButtonInner,
-                      pressed && { opacity: 0.6, backgroundColor: '#fee2e2' }
-                    ]}
-                    pointerEvents="auto"
-                    hitSlop={30}
-                  >
-                    <Ionicons name="trash-outline" size={26} color="#ef4444" />
-                  </Pressable>
+                  <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
                 </View>
-              </View>
+
+                <View style={styles.cardBody}>
+                  <View style={styles.infoRow}>
+                    <Ionicons name="home-outline" size={16} color="#6b7280" />
+                    <Text style={styles.infoText}>
+                      {inspection.property_config.bedrooms} BR •{' '}
+                      {inspection.property_config.bathrooms} BA
+                    </Text>
+                  </View>
+                  <View style={styles.infoRow}>
+                    <Ionicons name="calendar-outline" size={16} color="#6b7280" />
+                    <Text style={styles.infoText}>
+                      {new Date(inspection.inspection_date).toLocaleDateString()}
+                    </Text>
+                  </View>
+                  {inspection.inspector_name && (
+                    <View style={styles.infoRow}>
+                      <Ionicons name="person-outline" size={16} color="#6b7280" />
+                      <Text style={styles.infoText}>
+                        {inspection.inspector_name}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.progressContainer}>
+                  <View style={styles.progressHeader}>
+                    <Text style={styles.progressText}>
+                      Progress: {progress.completed}/{progress.total}
+                    </Text>
+                    <View
+                      style={[
+                        styles.statusBadge,
+                        {
+                          backgroundColor: getStatusColor(inspection.status),
+                        },
+                      ]}
+                    >
+                      <Text style={styles.statusText}>
+                        {inspection.status.replace('_', ' ').toUpperCase()}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.progressBar}>
+                    <View
+                      style={[
+                        styles.progressFill,
+                        { width: `${progress.percentage}%` },
+                      ]}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
             );
           })
         )}
