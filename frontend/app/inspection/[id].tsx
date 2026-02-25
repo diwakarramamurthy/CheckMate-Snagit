@@ -267,39 +267,73 @@ export default function InspectionDetailScreen() {
           <Ionicons name="arrow-back" size={24} color="#111827" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Inspection</Text>
-        <View style={styles.headerActions}>
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert('Options', 'Choose an action', [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Export PDF', onPress: handleExportPDF },
-                { text: 'Export Excel', onPress: handleExportExcel },
-                { 
-                  text: 'Delete Inspection', 
-                  onPress: handleDeleteInspection,
-                  style: 'destructive'
-                },
-              ]);
-            }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            style={{ marginRight: 12 }}
-          >
-            <Ionicons name="ellipsis-vertical" size={24} color="#111827" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert('Export Options', 'Choose export format', [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'PDF', onPress: handleExportPDF },
-                { text: 'Excel', onPress: handleExportExcel },
-              ]);
-            }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Ionicons name="download-outline" size={24} color="#3b82f6" />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => setShowActionMenu(true)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Ionicons name="ellipsis-vertical" size={24} color="#111827" />
+        </TouchableOpacity>
       </View>
+
+      {/* Action Menu Modal */}
+      <Modal
+        visible={showActionMenu}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowActionMenu(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowActionMenu(false)}
+        >
+          <View style={styles.actionMenu}>
+            <Text style={styles.actionMenuTitle}>Options</Text>
+            
+            <TouchableOpacity
+              style={styles.actionMenuItem}
+              onPress={() => {
+                setShowActionMenu(false);
+                handleExportPDF();
+              }}
+            >
+              <Ionicons name="document-text" size={24} color="#3b82f6" />
+              <Text style={styles.actionMenuText}>Export as PDF</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.actionMenuItem}
+              onPress={() => {
+                setShowActionMenu(false);
+                handleExportExcel();
+              }}
+            >
+              <Ionicons name="grid" size={24} color="#10b981" />
+              <Text style={styles.actionMenuText}>Export as Excel</Text>
+            </TouchableOpacity>
+
+            <View style={styles.actionMenuDivider} />
+
+            <TouchableOpacity
+              style={styles.actionMenuItem}
+              onPress={() => {
+                setShowActionMenu(false);
+                handleDeleteInspection();
+              }}
+            >
+              <Ionicons name="trash" size={24} color="#ef4444" />
+              <Text style={[styles.actionMenuText, { color: '#ef4444' }]}>Delete Inspection</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.actionMenuItem, styles.cancelButton]}
+              onPress={() => setShowActionMenu(false)}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
 
       <ScrollView style={styles.scrollView}>
         <View style={styles.propertyCard}>
