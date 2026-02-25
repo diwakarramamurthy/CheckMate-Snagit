@@ -138,15 +138,13 @@ export default function ItemDetailScreen() {
 
       if (!response.ok) throw new Error('Failed to update item');
       
-      Alert.alert('Success', 'Item updated successfully', [
-        {
-          text: 'OK',
-          onPress: () => router.back(),
-        },
-      ]);
+      console.log('✅ Item saved successfully, navigating back...');
+      
+      // Navigate back immediately without alert
+      router.back();
     } catch (error) {
       console.error('Error updating item:', error);
-      Alert.alert('Error', 'Failed to update item');
+      Alert.alert('Error', 'Failed to update item. Please try again.');
     } finally {
       setLoading(false);
     }
