@@ -160,34 +160,29 @@ export default function InspectionDetailScreen() {
   };
 
   const handleDeleteInspection = () => {
-    Alert.alert(
-      'Delete Inspection',
-      'Are you sure you want to delete this inspection? This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const response = await fetch(
-                `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
-                { method: 'DELETE' }
-              );
-              if (!response.ok) throw new Error('Failed to delete');
-              Alert.alert('Success', 'Inspection deleted successfully', [
-                {
-                  text: 'OK',
-                  onPress: () => router.replace('/'),
-                },
-              ]);
-            } catch (error) {
-              Alert.alert('Error', 'Failed to delete inspection');
-            }
-          },
-        },
-      ]
-    );
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    setDeleting(true);
+    try {
+      const response = await fetch(
+        `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
+        { method: 'DELETE' }
+      );
+      if (!response.ok) throw new Error('Failed to delete');
+      
+      setShowDeleteConfirm(false);
+      setDeleting(false);
+      
+      // Navigate back to home after successful delete
+      router.replace('/');
+    } catch (error) {
+      console.error('Delete error:', error);
+      setDeleting(false);
+      setShowDeleteConfirm(false);
+      Alert.alert('Error', 'Failed to delete inspection. Please try again.');
+    }
   };
 
   const getStatusIcon = (status: string) => {
