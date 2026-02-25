@@ -756,4 +756,60 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     fontWeight: '600',
   },
+  deleteConfirmDialog: {
+    backgroundColor: '#fff',
+    marginHorizontal: 32,
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+  },
+  deleteIconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#fee2e2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  deleteTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#111827',
+    marginBottom: 12,
+  },
+  deleteMessage: {
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 24,
+  },
+  deleteButtonsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  deleteDialogButton: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  cancelDialogButton: {
+    backgroundColor: '#f3f4f6',
+  },
+  cancelDialogText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#6b7280',
+  },
+  confirmDeleteButton: {
+    backgroundColor: '#ef4444',
+  },
+  confirmDeleteText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
 });
