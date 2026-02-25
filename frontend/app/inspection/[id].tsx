@@ -46,6 +46,8 @@ export default function InspectionDetailScreen() {
     new Set()
   );
   const [showActionMenu, setShowActionMenu] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchInspection = async () => {
     try {
