@@ -7,14 +7,13 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  Share,
   Modal,
+  Platform,
+  Linking,
 } from 'react-native';
 import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 
 const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
