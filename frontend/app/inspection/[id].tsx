@@ -403,6 +403,57 @@ export default function InspectionDetailScreen() {
         </View>
       </Modal>
 
+      {/* Share Menu Modal */}
+      <Modal
+        visible={showShareMenu}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowShareMenu(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setShowShareMenu(false)}
+        >
+          <View style={styles.actionMenu}>
+            <Text style={styles.actionMenuTitle}>
+              Share {shareType.toUpperCase()} Report
+            </Text>
+            
+            <TouchableOpacity
+              style={styles.actionMenuItem}
+              onPress={() => downloadReport(shareType)}
+            >
+              <Ionicons name="download" size={24} color="#3b82f6" />
+              <Text style={styles.actionMenuText}>Download to Device</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.actionMenuItem}
+              onPress={shareViaEmail}
+            >
+              <Ionicons name="mail" size={24} color="#ef4444" />
+              <Text style={styles.actionMenuText}>Share via Email</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.actionMenuItem}
+              onPress={shareViaWhatsApp}
+            >
+              <Ionicons name="logo-whatsapp" size={24} color="#25D366" />
+              <Text style={styles.actionMenuText}>Share via WhatsApp</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.actionMenuItem, styles.cancelButton]}
+              onPress={() => setShowShareMenu(false)}
+            >
+              <Text style={styles.cancelButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
       <ScrollView style={styles.scrollView}>
         <View style={styles.propertyCard}>
           <Text style={styles.propertyName}>
