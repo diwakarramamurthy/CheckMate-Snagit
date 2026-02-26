@@ -137,35 +137,54 @@ export default function InspectionDetailScreen() {
     );
   };
 
-  const downloadFile = async (url: string, filename: string) => {
-    try {
-      const fileUri = FileSystem.documentDirectory + filename;
-      const downloadResult = await FileSystem.downloadAsync(url, fileUri);
-      
-      if (downloadResult.status === 200) {
-        const canShare = await Sharing.isAvailableAsync();
-        if (canShare) {
-          await Sharing.shareAsync(downloadResult.uri);
-        } else {
-          Alert.alert('Success', `File saved to ${downloadResult.uri}`);
-        }
-      }
-    } catch (error) {
-      console.error('Download error:', error);
-      Alert.alert('Error', 'Failed to download file');
+  const handleExportPDF = () => {
+    setShowActionMenu(false);
+    setShareType('pdf');
+    setShowShareMenu(true);
+  };
+
+  const handleExportExcel = () => {
+    setShowActionMenu(false);
+    setShareType('excel');
+    setShowShareMenu(true);
+  };
+
+  const downloadReport = (type: 'pdf' | 'excel') => {
+    const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
+    const filename = `inspection_${inspection?.property_config.property_name.replace(/\s+/g, '_')}_${id}.${type === 'pdf' ? 'pdf' : 'xlsx'}`;
+    
+    // Open in new tab for download (works on mobile and desktop browsers)
+    if (Platform.OS === 'web') {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+    } else {
+      Linking.openURL(url);
     }
+    
+    setShowShareMenu(false);
   };
 
-  const handleExportPDF = async () => {
-    Alert.alert('Generating PDF', 'Please wait...');
-    const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/pdf`;
-    await downloadFile(url, `inspection_${id}.pdf`);
+  const shareViaEmail = () => {
+    const type = shareType;
+    const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
+    const subject = `Property Inspection Report - ${inspection?.property_config.property_name}`;
+    const body = `Please find attached the ${type.toUpperCase()} inspection report for ${inspection?.property_config.property_name} at ${inspection?.property_config.property_address}.\n\nDownload link: ${url}`;
+    
+    const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    Linking.openURL(mailtoUrl);
+    setShowShareMenu(false);
   };
 
-  const handleExportExcel = async () => {
-    Alert.alert('Generating Excel', 'Please wait...');
-    const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/excel`;
-    await downloadFile(url, `inspection_${id}.xlsx`);
+  const shareViaWhatsApp = () => {
+    const type = shareType;
+    const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
+    const message = `*Property Inspection Report*\n\n📋 Property: ${inspection?.property_config.property_name}\n📍 Address: ${inspection?.property_config.property_address}\n\n📄 ${type.toUpperCase()} Report: ${url}`;
+    
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    Linking.openURL(whatsappUrl);
+    setShowShareMenu(false);
   };
 
   const handleDeleteInspection = () => {
