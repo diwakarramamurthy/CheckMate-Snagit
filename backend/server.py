@@ -410,34 +410,50 @@ async def generate_pdf_report(inspection_id: str):
         elements.append(Paragraph(f"<b>{category}</b>", styles['Heading3']))
         
         category_data = [["Item", "Status", "Notes"]]
-        for item in items:
-            status_color = {
-                "pass": "GREEN",
-                "fail": "RED",
-                "needs_attention": "ORANGE",
-                "pending": "GRAY"
-            }.get(item.status, "GRAY")
-            
-            notes_text = item.notes[:100] + "..." if item.notes and len(item.notes) > 100 else (item.notes or "-")
-            
-            category_data.append([
-                item.item_name,
-                f"<font color='{status_color}'><b>{item.status.upper()}</b></font>",
-                notes_text
-            ])
-        
-        cat_table = Table(category_data, colWidths=[2.5*inch, 1*inch, 2.5*inch])
-        cat_table.setStyle(TableStyle([
+        table_styles = [
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f3f4f6')),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
             ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('ALIGN', (1, 1), (1, -1), 'CENTER'),  # Center align status column
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
             ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
             ('TOPPADDING', (0, 0), (-1, -1), 6),
             ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ]))
+        ]
+        
+        row_index = 1
+        for item in items:
+            # Determine status color
+            if item.status == "pass":
+                status_color = colors.HexColor('#10b981')  # Green
+                status_text = "PASS"
+            elif item.status == "fail":
+                status_color = colors.HexColor('#ef4444')  # Red
+                status_text = "FAIL"
+            elif item.status == "needs_attention":
+                status_color = colors.HexColor('#f59e0b')  # Orange
+                status_text = "NEEDS ATTENTION"
+            else:  # pending
+                status_color = colors.HexColor('#9ca3af')  # Gray
+                status_text = "PENDING"
+            
+            # Apply color to this specific row's status cell
+            table_styles.append(('TEXTCOLOR', (1, row_index), (1, row_index), status_color))
+            table_styles.append(('FONTNAME', (1, row_index), (1, row_index), 'Helvetica-Bold'))
+            
+            notes_text = item.notes[:100] + "..." if item.notes and len(item.notes) > 100 else (item.notes or "-")
+            
+            category_data.append([
+                item.item_name,
+                status_text,
+                notes_text
+            ])
+            row_index += 1
+        
+        cat_table = Table(category_data, colWidths=[2.5*inch, 1.2*inch, 2.3*inch])
+        cat_table.setStyle(TableStyle(table_styles))
         elements.append(cat_table)
         elements.append(Spacer(1, 0.2*inch))
     
