@@ -393,34 +393,22 @@ export default function InspectionDetailScreen() {
             {inspection.status === 'completed' && (
               <TouchableOpacity
                 style={styles.actionMenuItem}
-                onPress={() => {
+                onPress={async () => {
                   setShowActionMenu(false);
-                  Alert.alert(
-                    'Reopen Inspection',
-                    'Change status back to In Progress?',
-                    [
-                      { text: 'Cancel', style: 'cancel' },
+                  try {
+                    const response = await fetch(
+                      `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
                       {
-                        text: 'Reopen',
-                        onPress: async () => {
-                          try {
-                            const response = await fetch(
-                              `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
-                              {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ status: 'in_progress' }),
-                              }
-                            );
-                            if (!response.ok) throw new Error('Failed to update');
-                            fetchInspection();
-                          } catch (error) {
-                            Alert.alert('Error', 'Failed to reopen inspection');
-                          }
-                        },
-                      },
-                    ]
-                  );
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: 'in_progress' }),
+                      }
+                    );
+                    if (!response.ok) throw new Error('Failed to update');
+                    fetchInspection();
+                  } catch (error) {
+                    console.error('Error reopening inspection:', error);
+                  }
                 }}
               >
                 <Ionicons name="refresh" size={24} color="#f59e0b" />
