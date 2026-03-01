@@ -459,14 +459,8 @@ export default function InspectionDetailScreen() {
               onPress={() => {
                 const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${shareType}`;
                 Clipboard.setString(url);
+                // Close menu - user will see it worked when they paste
                 setShowShareMenu(false);
-                setTimeout(() => {
-                  Alert.alert(
-                    '✅ Link Copied!',
-                    'The download link has been copied to your clipboard.\n\nYou can now paste it in:\n• Email\n• WhatsApp\n• SMS\n• Any messaging app',
-                    [{ text: 'OK' }]
-                  );
-                }, 100);
               }}
             >
               <Ionicons name="copy" size={24} color="#10b981" />
