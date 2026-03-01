@@ -172,24 +172,54 @@ export default function InspectionDetailScreen() {
     setShowShareMenu(false);
   };
 
-  const shareViaEmail = () => {
+  const shareViaEmail = async () => {
     const type = shareType;
     const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
     const subject = `Property Inspection Report - ${inspection?.property_config.property_name}`;
-    const body = `Please find attached the ${type.toUpperCase()} inspection report for ${inspection?.property_config.property_name} at ${inspection?.property_config.property_address}.\n\nDownload link: ${url}`;
+    const body = `Please find the ${type.toUpperCase()} inspection report for ${inspection?.property_config.property_name} at ${inspection?.property_config.property_address}.\n\nDownload link: ${url}`;
     
     const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    Linking.openURL(mailtoUrl);
+    
+    try {
+      const supported = await Linking.canOpenURL(mailtoUrl);
+      if (supported) {
+        await Linking.openURL(mailtoUrl);
+        console.log('✅ Opening email client');
+      } else {
+        Alert.alert('Email', 'Please copy the link and send via email', [
+          { text: 'OK' }
+        ]);
+      }
+    } catch (error) {
+      console.error('Email error:', error);
+      Alert.alert('Report Link', `Share this link:\n\n${url}`);
+    }
+    
     setShowShareMenu(false);
   };
 
-  const shareViaWhatsApp = () => {
+  const shareViaWhatsApp = async () => {
     const type = shareType;
     const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
     const message = `*Property Inspection Report*\n\n📋 Property: ${inspection?.property_config.property_name}\n📍 Address: ${inspection?.property_config.property_address}\n\n📄 ${type.toUpperCase()} Report: ${url}`;
     
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    Linking.openURL(whatsappUrl);
+    
+    try {
+      const supported = await Linking.canOpenURL(whatsappUrl);
+      if (supported) {
+        await Linking.openURL(whatsappUrl);
+        console.log('✅ Opening WhatsApp');
+      } else {
+        Alert.alert('WhatsApp', 'Please copy the link and share manually', [
+          { text: 'OK' }
+        ]);
+      }
+    } catch (error) {
+      console.error('WhatsApp error:', error);
+      Alert.alert('Report Link', `Share this link:\n\n${url}`);
+    }
+    
     setShowShareMenu(false);
   };
 
