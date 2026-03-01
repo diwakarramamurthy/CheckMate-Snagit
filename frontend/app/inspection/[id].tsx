@@ -503,6 +503,55 @@ export default function InspectionDetailScreen() {
         </TouchableOpacity>
       </Modal>
 
+      {/* Complete Confirmation Modal */}
+      <Modal
+        visible={showCompleteConfirm}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowCompleteConfirm(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.deleteConfirmDialog}>
+            <View style={[styles.deleteIconContainer, { backgroundColor: '#d1fae5' }]}>
+              <Ionicons name="checkmark-done" size={48} color="#10b981" />
+            </View>
+            
+            <Text style={styles.deleteTitle}>Mark as Completed?</Text>
+            <Text style={styles.deleteMessage}>
+              {(() => {
+                const pendingItems = inspection?.checklist_items.filter(
+                  item => item.status === 'pending'
+                ).length || 0;
+                const totalItems = inspection?.checklist_items.length || 0;
+                const completedItems = totalItems - pendingItems;
+                
+                if (pendingItems > 0) {
+                  return `You have ${pendingItems} items still pending (${completedItems}/${totalItems} completed).\n\nYou can still mark this as completed. The status will change to green on the home screen.`;
+                } else {
+                  return `All ${totalItems} items have been checked!\n\nGreat job! Ready to mark this inspection as completed?`;
+                }
+              })()}
+            </Text>
+
+            <View style={styles.deleteButtonsRow}>
+              <TouchableOpacity
+                style={[styles.deleteDialogButton, styles.cancelDialogButton]}
+                onPress={() => setShowCompleteConfirm(false)}
+              >
+                <Text style={styles.cancelDialogText}>Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.deleteDialogButton, { backgroundColor: '#10b981' }]}
+                onPress={markAsCompleted}
+              >
+                <Text style={styles.confirmDeleteText}>Mark Complete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView style={styles.scrollView}>
         <View style={styles.propertyCard}>
           <Text style={styles.propertyName}>
