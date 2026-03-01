@@ -390,6 +390,44 @@ export default function InspectionDetailScreen() {
 
             <View style={styles.actionMenuDivider} />
 
+            {inspection.status === 'completed' && (
+              <TouchableOpacity
+                style={styles.actionMenuItem}
+                onPress={() => {
+                  setShowActionMenu(false);
+                  Alert.alert(
+                    'Reopen Inspection',
+                    'Change status back to In Progress?',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'Reopen',
+                        onPress: async () => {
+                          try {
+                            const response = await fetch(
+                              `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
+                              {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ status: 'in_progress' }),
+                              }
+                            );
+                            if (!response.ok) throw new Error('Failed to update');
+                            fetchInspection();
+                          } catch (error) {
+                            Alert.alert('Error', 'Failed to reopen inspection');
+                          }
+                        },
+                      },
+                    ]
+                  );
+                }}
+              >
+                <Ionicons name="refresh" size={24} color="#f59e0b" />
+                <Text style={[styles.actionMenuText, { color: '#f59e0b' }]}>Reopen Inspection</Text>
+              </TouchableOpacity>
+            )}
+
             <TouchableOpacity
               style={styles.actionMenuItem}
               onPress={() => {
