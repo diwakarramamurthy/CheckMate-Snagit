@@ -173,77 +173,44 @@ export default function InspectionDetailScreen() {
     setShowShareMenu(false);
   };
 
-  const shareViaEmail = async () => {
+  const shareViaEmail = () => {
     const type = shareType;
     const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
     const propertyName = inspection?.property_config.property_name || 'Property';
     
-    const subject = `Inspection Report - ${propertyName}`;
-    const body = `View the ${type.toUpperCase()} inspection report:\n${url}`;
+    // Copy to clipboard
+    Clipboard.setString(url);
     
-    const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setShowShareMenu(false);
     
-    console.log('📧 Email URL:', mailtoUrl);
-    
-    try {
-      await Linking.openURL(mailtoUrl);
-      console.log('✅ Email client opened');
-      setShowShareMenu(false);
-    } catch (error) {
-      console.error('Email error:', error);
-      // Fallback: Show URL in alert
-      Alert.alert(
-        'Share via Email',
-        `Copy this link and paste in your email:\n\n${url}`,
-        [
-          { text: 'Close', style: 'cancel' },
-          { 
-            text: 'Open Email', 
-            onPress: () => {
-              // Try simpler mailto
-              Linking.openURL('mailto:').catch(() => {});
-            }
-          }
-        ]
-      );
-      setShowShareMenu(false);
-    }
+    // Show alert with instructions
+    Alert.alert(
+      '📧 Share via Email',
+      `Link copied to clipboard!\n\n1. Open your email app\n2. Paste the link (long press → Paste)\n3. Send to recipient\n\nLink: ${url.substring(0, 50)}...`,
+      [
+        { text: 'OK' }
+      ]
+    );
   };
 
-  const shareViaWhatsApp = async () => {
+  const shareViaWhatsApp = () => {
     const type = shareType;
     const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
     const propertyName = inspection?.property_config.property_name || 'Property';
     
-    const message = `📋 *${propertyName} - Inspection Report*\n\n${type.toUpperCase()} Report: ${url}`;
+    // Copy to clipboard
+    Clipboard.setString(url);
     
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    setShowShareMenu(false);
     
-    console.log('💬 WhatsApp URL:', whatsappUrl);
-    
-    try {
-      await Linking.openURL(whatsappUrl);
-      console.log('✅ WhatsApp opened');
-      setShowShareMenu(false);
-    } catch (error) {
-      console.error('WhatsApp error:', error);
-      // Fallback: Show URL in alert
-      Alert.alert(
-        'Share via WhatsApp',
-        `Copy this link and paste in WhatsApp:\n\n${url}`,
-        [
-          { text: 'Close', style: 'cancel' },
-          { 
-            text: 'Try Again', 
-            onPress: () => {
-              // Try opening WhatsApp web
-              Linking.openURL('https://web.whatsapp.com').catch(() => {});
-            }
-          }
-        ]
-      );
-      setShowShareMenu(false);
-    }
+    // Show alert with instructions
+    Alert.alert(
+      '💬 Share via WhatsApp',
+      `Link copied to clipboard!\n\n1. Open WhatsApp\n2. Select chat/group\n3. Paste the link (long press → Paste)\n4. Send\n\nLink: ${url.substring(0, 50)}...`,
+      [
+        { text: 'OK' }
+      ]
+    );
   };
 
   const handleDeleteInspection = () => {
