@@ -451,23 +451,26 @@ export default function InspectionDetailScreen() {
               onPress={() => downloadReport(shareType)}
             >
               <Ionicons name="download" size={24} color="#3b82f6" />
-              <Text style={styles.actionMenuText}>Download to Device</Text>
+              <Text style={styles.actionMenuText}>Download File</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.actionMenuItem}
-              onPress={shareViaEmail}
+              onPress={() => {
+                const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${shareType}`;
+                Clipboard.setString(url);
+                setShowShareMenu(false);
+                setTimeout(() => {
+                  Alert.alert(
+                    '✅ Link Copied!',
+                    'The download link has been copied to your clipboard.\n\nYou can now paste it in:\n• Email\n• WhatsApp\n• SMS\n• Any messaging app',
+                    [{ text: 'OK' }]
+                  );
+                }, 100);
+              }}
             >
-              <Ionicons name="mail" size={24} color="#ef4444" />
-              <Text style={styles.actionMenuText}>Share via Email</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.actionMenuItem}
-              onPress={shareViaWhatsApp}
-            >
-              <Ionicons name="logo-whatsapp" size={24} color="#25D366" />
-              <Text style={styles.actionMenuText}>Share via WhatsApp</Text>
+              <Ionicons name="copy" size={24} color="#10b981" />
+              <Text style={styles.actionMenuText}>Copy Link to Share</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
