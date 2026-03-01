@@ -109,33 +109,58 @@ export default function InspectionDetailScreen() {
   };
 
   const handleCompleteInspection = async () => {
-    Alert.alert(
-      'Complete Inspection',
-      'Mark this inspection as completed?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Complete',
-          onPress: async () => {
-            try {
-              const response = await fetch(
-                `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
-                {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ status: 'completed' }),
-                }
-              );
-              if (!response.ok) throw new Error('Failed to update');
-              fetchInspection();
-              Alert.alert('Success', 'Inspection marked as completed');
-            } catch (error) {
-              Alert.alert('Error', 'Failed to update inspection status');
-            }
+    // Check if all items are completed
+    const pendingItems = inspection?.checklist_items.filter(
+      item => item.status === 'pending'
+    ).length || 0;
+    
+    const totalItems = inspection?.checklist_items.length || 0;
+    const completedItems = totalItems - pendingItems;
+    
+    if (pendingItems > 0) {
+      Alert.alert(
+        'Inspection Not Complete',
+        `You have ${pendingItems} items still pending (${completedItems}/${totalItems} completed).\n\nAre you sure you want to mark this inspection as completed?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Mark Complete Anyway',
+            style: 'destructive',
+            onPress: () => markAsCompleted()
           },
-        },
-      ]
-    );
+        ]
+      );
+    } else {
+      Alert.alert(
+        'Complete Inspection',
+        `All ${totalItems} items have been checked! Mark this inspection as completed?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Complete',
+            onPress: () => markAsCompleted()
+          },
+        ]
+      );
+    }
+  };
+  
+  const markAsCompleted = async () => {
+    try {
+      const response = await fetch(
+        `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'completed' }),
+        }
+      );
+      if (!response.ok) throw new Error('Failed to update');
+      fetchInspection();
+      Alert.alert('Success', 'Inspection marked as completed');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to update inspection status');
+    }
   };
 
   const handleExportPDF = () => {
