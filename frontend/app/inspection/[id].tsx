@@ -149,18 +149,24 @@ export default function InspectionDetailScreen() {
     setShowShareMenu(true);
   };
 
-  const downloadReport = (type: 'pdf' | 'excel') => {
+  const downloadReport = async (type: 'pdf' | 'excel') => {
     const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
-    const filename = `inspection_${inspection?.property_config.property_name.replace(/\s+/g, '_')}_${id}.${type === 'pdf' ? 'pdf' : 'xlsx'}`;
     
-    // Open in new tab for download (works on mobile and desktop browsers)
-    if (Platform.OS === 'web') {
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.click();
-    } else {
-      Linking.openURL(url);
+    try {
+      // Open URL directly - works on all mobile browsers
+      const supported = await Linking.canOpenURL(url);
+      if (supported) {
+        await Linking.openURL(url);
+        console.log('✅ Opening download URL:', url);
+      } else {
+        Alert.alert('Download', `Please open this link in your browser:\n\n${url}`);
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      Alert.alert('Download Link', url, [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Copy Link', onPress: () => console.log('Link:', url) }
+      ]);
     }
     
     setShowShareMenu(false);
