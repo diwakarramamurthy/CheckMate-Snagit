@@ -176,19 +176,19 @@ export default function InspectionDetailScreen() {
   const shareViaEmail = () => {
     const type = shareType;
     const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
-    const propertyName = inspection?.property_config.property_name || 'Property';
     
-    // Copy to clipboard
+    // Copy to clipboard first
     Clipboard.setString(url);
     
-    setShowShareMenu(false);
-    
-    // Show alert with instructions
+    // Show alert THEN close menu
     Alert.alert(
-      '📧 Share via Email',
-      `Link copied to clipboard!\n\n1. Open your email app\n2. Paste the link (long press → Paste)\n3. Send to recipient\n\nLink: ${url.substring(0, 50)}...`,
+      '📧 Email Sharing',
+      `✅ Link copied to clipboard!\n\nTo share via email:\n\n1. Open your email app\n2. Create new message\n3. Long press and Paste the link\n4. Add recipient and send\n\nThe download link is ready to paste!`,
       [
-        { text: 'OK' }
+        { 
+          text: 'Got it!',
+          onPress: () => setShowShareMenu(false)
+        }
       ]
     );
   };
@@ -196,19 +196,19 @@ export default function InspectionDetailScreen() {
   const shareViaWhatsApp = () => {
     const type = shareType;
     const url = `${EXPO_PUBLIC_BACKEND_URL}/api/inspections/${id}/${type}`;
-    const propertyName = inspection?.property_config.property_name || 'Property';
     
-    // Copy to clipboard
+    // Copy to clipboard first
     Clipboard.setString(url);
     
-    setShowShareMenu(false);
-    
-    // Show alert with instructions
+    // Show alert THEN close menu
     Alert.alert(
-      '💬 Share via WhatsApp',
-      `Link copied to clipboard!\n\n1. Open WhatsApp\n2. Select chat/group\n3. Paste the link (long press → Paste)\n4. Send\n\nLink: ${url.substring(0, 50)}...`,
+      '💬 WhatsApp Sharing',
+      `✅ Link copied to clipboard!\n\nTo share via WhatsApp:\n\n1. Open WhatsApp\n2. Select a chat or group\n3. Long press and Paste the link\n4. Send the message\n\nThe download link is ready to paste!`,
       [
-        { text: 'OK' }
+        { 
+          text: 'Got it!',
+          onPress: () => setShowShareMenu(false)
+        }
       ]
     );
   };
