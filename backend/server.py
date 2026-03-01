@@ -589,11 +589,17 @@ async def generate_excel_report(inspection_id: str):
     wb.save(buffer)
     buffer.seek(0)
     
+    # Generate clean filename
+    property_name = inspection_obj.property_config.property_name.replace(' ', '_').replace('/', '_')
+    filename = f"CheckMate_Inspection_{property_name}_{inspection_id[:8]}.xlsx"
+    
     return StreamingResponse(
         buffer,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={
-            "Content-Disposition": f"attachment; filename=inspection_{inspection_id}.xlsx"
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Cache-Control": "no-cache",
         }
     )
 
