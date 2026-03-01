@@ -48,6 +48,7 @@ export default function InspectionDetailScreen() {
   const [showActionMenu, setShowActionMenu] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
   const [shareType, setShareType] = useState<'pdf' | 'excel'>('pdf');
   const [deleting, setDeleting] = useState(false);
 
