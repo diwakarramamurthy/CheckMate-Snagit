@@ -12,7 +12,7 @@ from datetime import datetime
 import sys
 
 # Backend URL from environment - API endpoints prefixed with /api
-BASE_URL = "https://checkmate-checklist.preview.emergentagent.com/api"
+BASE_URL = "https://inspect-review.preview.emergentagent.com/api"
 
 class CheckMateAPITester:
     def __init__(self, base_url):

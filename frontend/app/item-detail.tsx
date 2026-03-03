@@ -165,13 +165,60 @@ export default function ItemDetailScreen() {
     }
   };
 
-  const statusOptions = [
+  // First row: Pending, Pass, Fail (3 buttons)
+  const statusOptionsRow1 = [
     { value: 'pending', label: 'Pending', icon: 'ellipse-outline' },
     { value: 'pass', label: 'Pass', icon: 'checkmark-circle' },
     { value: 'fail', label: 'Fail', icon: 'close-circle' },
-    { value: 'needs_attention', label: 'Needs Attention', icon: 'alert-circle' },
-    { value: 'na', label: 'NA (Not Applicable)', icon: 'remove-circle' },
   ];
+
+  // Second row: Needs Attention, NA (2 buttons)
+  const statusOptionsRow2 = [
+    { value: 'needs_attention', label: 'Needs Attention', icon: 'alert-circle' },
+    { value: 'na', label: 'N/A', icon: 'remove-circle' },
+  ];
+
+  const renderStatusButton = (option: { value: string; label: string; icon: string }, isSmall: boolean = false) => (
+    <TouchableOpacity
+      key={option.value}
+      style={[
+        isSmall ? styles.statusButtonSmall : styles.statusButtonLarge,
+        status === option.value && styles.statusButtonActive,
+        {
+          borderColor:
+            status === option.value
+              ? getStatusColor(option.value)
+              : '#d1d5db',
+        },
+      ]}
+      onPress={() => setStatus(option.value)}
+    >
+      <Ionicons
+        name={option.icon as any}
+        size={24}
+        color={
+          status === option.value
+            ? getStatusColor(option.value)
+            : '#9ca3af'
+        }
+      />
+      <Text
+        style={[
+          styles.statusLabel,
+          status === option.value && styles.statusLabelActive,
+          {
+            color:
+              status === option.value
+                ? getStatusColor(option.value)
+                : '#6b7280',
+          },
+        ]}
+        numberOfLines={1}
+      >
+        {option.label}
+      </Text>
+    </TouchableOpacity>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -198,47 +245,13 @@ export default function ItemDetailScreen() {
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Status</Text>
-            <View style={styles.statusGrid}>
-              {statusOptions.map((option) => (
-                <TouchableOpacity
-                  key={option.value}
-                  style={[
-                    styles.statusButton,
-                    status === option.value && styles.statusButtonActive,
-                    {
-                      borderColor:
-                        status === option.value
-                          ? getStatusColor(option.value)
-                          : '#d1d5db',
-                    },
-                  ]}
-                  onPress={() => setStatus(option.value)}
-                >
-                  <Ionicons
-                    name={option.icon as any}
-                    size={28}
-                    color={
-                      status === option.value
-                        ? getStatusColor(option.value)
-                        : '#9ca3af'
-                    }
-                  />
-                  <Text
-                    style={[
-                      styles.statusLabel,
-                      status === option.value && styles.statusLabelActive,
-                      {
-                        color:
-                          status === option.value
-                            ? getStatusColor(option.value)
-                            : '#6b7280',
-                      },
-                    ]}
-                  >
-                    {option.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+            {/* First row: 3 buttons */}
+            <View style={styles.statusRow}>
+              {statusOptionsRow1.map((option) => renderStatusButton(option, true))}
+            </View>
+            {/* Second row: 2 buttons */}
+            <View style={styles.statusRowCentered}>
+              {statusOptionsRow2.map((option) => renderStatusButton(option, false))}
             </View>
           </View>
 
@@ -374,14 +387,29 @@ const styles = StyleSheet.create({
     color: '#111827',
     marginBottom: 16,
   },
-  statusGrid: {
+  statusRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
+    justifyContent: 'space-between',
+    gap: 8,
+    marginBottom: 10,
   },
-  statusButton: {
-    width: '48%',
-    aspectRatio: 1.5,
+  statusRowCentered: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  statusButtonSmall: {
+    flex: 1,
+    paddingVertical: 14,
+    borderWidth: 2,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  statusButtonLarge: {
+    width: '45%',
+    paddingVertical: 14,
     borderWidth: 2,
     borderRadius: 12,
     justifyContent: 'center',
