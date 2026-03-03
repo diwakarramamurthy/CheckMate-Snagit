@@ -435,8 +435,11 @@ async def generate_pdf_report(inspection_id: str):
             elif item.status == "needs_attention":
                 status_color = colors.HexColor('#f59e0b')  # Orange
                 status_text = "NEEDS ATTENTION"
+            elif item.status == "na":
+                status_color = colors.HexColor('#6b7280')  # Gray
+                status_text = "N/A"
             else:  # pending
-                status_color = colors.HexColor('#9ca3af')  # Gray
+                status_color = colors.HexColor('#9ca3af')  # Light Gray
                 status_text = "PENDING"
             
             # Apply color to this specific row's status cell
@@ -579,13 +582,21 @@ async def generate_excel_report(inspection_id: str):
         ws.cell(row=row, column=1, value=item.category)
         ws.cell(row=row, column=2, value=item.item_name)
         
-        status_cell = ws.cell(row=row, column=3, value=item.status.upper())
+        # Set status text and color
+        if item.status == "na":
+            status_text = "N/A"
+        else:
+            status_text = item.status.upper()
+        
+        status_cell = ws.cell(row=row, column=3, value=status_text)
         if item.status == "pass":
             status_cell.font = Font(color="008000", bold=True)
         elif item.status == "fail":
             status_cell.font = Font(color="FF0000", bold=True)
         elif item.status == "needs_attention":
             status_cell.font = Font(color="FFA500", bold=True)
+        elif item.status == "na":
+            status_cell.font = Font(color="6b7280", bold=True)
         
         ws.cell(row=row, column=4, value=item.notes or "-")
         ws.cell(row=row, column=5, value=f"{len(item.photos)} photo(s)" if item.photos else "No photos")

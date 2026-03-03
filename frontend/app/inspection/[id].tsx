@@ -247,6 +247,8 @@ export default function InspectionDetailScreen() {
         return <Ionicons name="close-circle" size={24} color="#ef4444" />;
       case 'needs_attention':
         return <Ionicons name="alert-circle" size={24} color="#f59e0b" />;
+      case 'na':
+        return <Ionicons name="remove-circle" size={24} color="#6b7280" />;
       default:
         return <Ionicons name="ellipse-outline" size={24} color="#9ca3af" />;
     }

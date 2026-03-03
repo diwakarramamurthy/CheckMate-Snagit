@@ -158,6 +158,8 @@ export default function ItemDetailScreen() {
         return '#ef4444';
       case 'needs_attention':
         return '#f59e0b';
+      case 'na':
+        return '#6b7280';
       default:
         return '#9ca3af';
     }
@@ -168,6 +170,7 @@ export default function ItemDetailScreen() {
     { value: 'pass', label: 'Pass', icon: 'checkmark-circle' },
     { value: 'fail', label: 'Fail', icon: 'close-circle' },
     { value: 'needs_attention', label: 'Needs Attention', icon: 'alert-circle' },
+    { value: 'na', label: 'NA (Not Applicable)', icon: 'remove-circle' },
   ];
 
   return (
