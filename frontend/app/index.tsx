@@ -126,7 +126,7 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View>
-          <Text style={styles.headerTitle}>CheckMate</Text>
+          <Text style={styles.headerTitle}>CheckMate - Snagit</Text>
           <Text style={styles.headerSubtitle}>Property Inspection</Text>
         </View>
         <Ionicons name="checkmark-circle" size={40} color="#3b82f6" />
