@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CheckMate-Snagit
+Comment=Property Inspection Management App
+Exec=bash -c "cd %k/.. && bash start.sh"
+Icon=%k/../frontend/assets/images/icon.png
+Terminal=true
+Categories=Utility;
+StartupNotify=true
